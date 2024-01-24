@@ -11,7 +11,7 @@ use Livewire\Livewire;
 use Lunar\Hub\Facades\Menu;
 use Lunar\Hub\Menu\MenuLink;
 use UserAuditTrail\Database\Seeders\QuizSeeder;
-use XtendLunar\Addons\QuizApp\Livewire\AuditTrail\Table;
+use XtendLunar\Addons\QuizApp\Livewire\Quiz\Table;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
 use XtendLunar\Addons\QuizApp\Policies\QuizPolicy;
@@ -51,7 +51,7 @@ class QuizAppProvider extends XtendAddonProvider
             ->addItem(function (MenuLink $item) {
                 return $item->name('Quiz App')
                     ->handle('hub.quiz-app')
-                    ->route('hub.quiz-app')
+                    ->route('hub.quiz-app.index')
                     ->icon('users');
             });
 

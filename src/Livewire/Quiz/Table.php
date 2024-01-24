@@ -1,6 +1,6 @@
 <?php
 
-namespace XtendLunar\Addons\QuizApp\Livewire\AuditTrail;
+namespace XtendLunar\Addons\QuizApp\Livewire\Quiz;
 
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;

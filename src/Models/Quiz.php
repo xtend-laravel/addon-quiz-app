@@ -11,7 +11,7 @@ class Quiz extends Model
 {
     use HasFactory;
 
-    protected $table = 'xtend_quiz';
+    protected $table = 'xtend_quizzes';
 
     protected $casts = [
 
@@ -28,6 +28,6 @@ class Quiz extends Model
 
     public function questions(): HasMany
     {
-        return $this->hasMany(UserAuditEvent::class);
+        return $this->hasMany(QuizQuestion::class);
     }
 }
