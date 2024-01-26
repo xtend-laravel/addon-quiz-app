@@ -5,6 +5,7 @@ namespace XtendLunar\Addons\QuizApp\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\hasOne;
 use QuizApp\Database\Factories\QuizQuestionFactory;
 
 class QuizQuestion extends Model
@@ -31,7 +32,7 @@ class QuizQuestion extends Model
 
     public function correctAnswer()
     {
-        return $this->belongsTo(Answer::class, 'correct_answer_id');
+        return $this->hasOne(Answer::class, 'correct_answer_id');
     }
 
     protected static function newFactory(): QuizQuestionFactory
