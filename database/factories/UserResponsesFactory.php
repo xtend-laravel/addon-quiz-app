@@ -13,7 +13,7 @@ class UserResponsesFactory extends Factory
     {
         return [
             'user_id' => function () {
-                return \XtendLunar\Addons\QuizApp\Models\User::factory()->create()->id;
+                return \App\Models\User::factory()->create()->id;
             },
             'question_id' => function () {
                 return \XtendLunar\Addons\QuizApp\Models\Question::factory()->create()->id;
