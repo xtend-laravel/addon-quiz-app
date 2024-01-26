@@ -11,16 +11,14 @@ class UserResponsesFactory extends Factory
 
     public function definition(): array
     {
+        $userIds = \App\Models\User::pluck('id')->toArray();
+        $quizQuestionIds = \XtendLunar\Addons\QuizApp\Models\QuizQuestion::pluck('id')->toArray();
+        $answerIds = \XtendLunar\Addons\QuizApp\Models\Answers::pluck('id')->toArray();
+
         return [
-            'user_id' => function () {
-                return \App\Models\User::factory()->create()->id;
-            },
-            'question_id' => function () {
-                return \XtendLunar\Addons\QuizApp\Models\Question::factory()->create()->id;
-            },
-            'answer_id' => function () {
-                return \XtendLunar\Addons\QuizApp\Models\Answer::factory()->create()->id;
-            },
+            'user_id' => $this->faker->randomElement($userIds),
+            'question_id' => $this->faker->randomElement($quizQuestionIds),
+            'answer_id' => $this->faker->randomElement($answerIds),
             'answered_duration' => $this->faker->numberBetween(1, 300),
             'answered_at' => $this->faker->dateTimeThisYear(),
         ];

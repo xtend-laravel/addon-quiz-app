@@ -11,10 +11,10 @@ class QuizQuestionFactory extends Factory
 
     public function definition(): array
     {
+        $quizIds = \XtendLunar\Addons\QuizApp\Models\Quiz::pluck('id')->toArray();
+
         return [
-            'quiz_id' => function () {
-                return \XtendLunar\Addons\QuizApp\Models\Quiz::factory()->create()->id;
-            },
+            'quiz_id' => $this->faker->randomElement($quizIds),
             'correct_answer_id' => function () {
                 return \XtendLunar\Addons\QuizApp\Models\AnswerFactory::factory()->create()->id;
             },
