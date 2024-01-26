@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_quiz_progress', function (Blueprint $table) {
+        Schema::create('xtend_user_quiz_progress', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('quiz_id')->constrained();
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_quiz_progress');
+        Schema::dropIfExists('xtend_user_quiz_progress');
     }
 };

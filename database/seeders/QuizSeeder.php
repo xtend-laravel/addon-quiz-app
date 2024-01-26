@@ -3,6 +3,8 @@
 namespace UserAuditTrail\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use XtendLunar\Addons\QuizApp\Models\Quiz;
+use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
 
 class QuizSeeder extends Seeder
 {
@@ -13,6 +15,6 @@ class QuizSeeder extends Seeder
      */
     public function run()
     {
-
+        Quiz::factory()->count(5)->create();
     }
 }

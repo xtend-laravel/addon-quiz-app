@@ -13,21 +13,29 @@ class QuizQuestion extends Model
 
     protected $table = 'xtend_quiz_questions';
 
-    protected $casts = [
-
-    ];
-
     protected $fillable = [
-
+        'quiz_id',
+        'correct_answer_id',
+        'handle',
+        'name'
     ];
+
+    protected $casts = [
+        'name' => 'json',
+    ];
+
+    public function quiz()
+    {
+        return $this->belongsTo(Quiz::class);
+    }
+
+    public function correctAnswer()
+    {
+        return $this->belongsTo(Answer::class, 'correct_answer_id');
+    }
 
     protected static function newFactory(): QuizQuestionFactory
     {
         return QuizQuestionFactory::new();
-    }
-
-    public function quiz(): BelongsTo
-    {
-        return $this->belongsTo(Quiz::class);
     }
 }

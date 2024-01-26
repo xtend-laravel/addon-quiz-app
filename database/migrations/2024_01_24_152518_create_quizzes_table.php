@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->json('name')->nullable();
-            $table->json('content')->nullable()->collation('utf8mb4_unicode_ci');
+            $table->json('content')->nullable();
             $table->string('featured_image')->nullable();
             $table->integer('question_duration');
             $table->dateTime('starts_at');
