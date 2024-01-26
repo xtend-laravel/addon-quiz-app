@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Gate;
 use Livewire\Livewire;
 use Lunar\Hub\Facades\Menu;
 use Lunar\Hub\Menu\MenuLink;
-use UserAuditTrail\Database\Seeders\QuizSeeder;
+use QuizApp\Database\Seeders\QuizSeeder;
 use XtendLunar\Addons\QuizApp\Livewire\Quiz\Table;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\QuizQuestion;

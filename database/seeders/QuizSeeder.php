@@ -1,6 +1,6 @@
 <?php
 
-namespace UserAuditTrail\Database\Seeders;
+namespace QuizApp\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
