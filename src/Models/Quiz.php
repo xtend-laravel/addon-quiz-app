@@ -14,11 +14,18 @@ class Quiz extends Model
     protected $table = 'xtend_quizzes';
 
     protected $casts = [
-
+        'starts_at' => 'datetime',
+        'ends_at' => 'datetime',
+        'content' => 'array'
     ];
 
     protected $fillable = [
-
+        'name',
+        'content',
+        'featured_image',
+        'question_duration',
+        'starts_at',
+        'ends_at'
     ];
 
     protected static function newFactory(): QuizFactory

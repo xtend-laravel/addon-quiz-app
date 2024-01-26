@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xtend_quizzes', function (Blueprint $table) {
+        Schema::create('quiz_prize_tiers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('quiz_id')->constrained();
+            $table->foreignId('discount_id')->constrained();
             $table->string('name');
-            $table->json('name')->nullable();
-            $table->json('content')->nullable()->collation('utf8mb4_unicode_ci');
-            $table->string('featured_image')->nullable();
-            $table->integer('question_duration');
-            $table->dateTime('starts_at');
-            $table->dateTime('ends_at');
+            $table->integer('percentage_off');
+            $table->json('rules')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('xtend_quizzes');
+        Schema::dropIfExists('quiz_prize_tiers');
     }
 };
