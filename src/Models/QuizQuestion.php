@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\hasOne;
+use Illuminate\Database\Eloquent\Relations\hasMany;
 use QuizApp\Database\Factories\QuizQuestionFactory;
 
 class QuizQuestion extends Model
@@ -32,7 +33,12 @@ class QuizQuestion extends Model
 
     public function correctAnswer()
     {
-        return $this->hasOne(Answer::class, 'correct_answer_id');
+        return $this->hasOne(Answers::class, 'correct_answer_id');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answers::class);
     }
 
     protected static function newFactory(): QuizQuestionFactory
