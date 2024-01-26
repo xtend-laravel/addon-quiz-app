@@ -5,7 +5,7 @@ namespace XtendLunar\Addons\QuizApp\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use UserAuditTrail\Database\Factories\QuizFactory;
+use QuizApp\Database\Factories\QuizFactory;
 
 class Quiz extends Model
 {

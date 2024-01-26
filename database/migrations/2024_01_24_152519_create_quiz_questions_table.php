@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('xtend_quiz_questions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('quiz_id')->constrained();
+            $table->foreignId('correct_answer_id ')->constrained();
             $table->string('handle');
             $table->json('name')->nullable();
             $table->timestamps();
