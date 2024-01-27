@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xtend_quiz_questions', function (Blueprint $table) {
+        Schema::create('xtend_quiz_answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('quiz_id')->constrained();
-            $table->foreignId('correct_answer_id ')->constrained();
+            $table->foreignId('question_id')->constrained('xtend_quiz_questions');
             $table->string('handle');
             $table->json('name')->nullable();
+            $table->boolean('is_correct')->default(false);
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('xtend_quiz_questions');
+        Schema::dropIfExists('xtend_quiz_answers');
     }
 };

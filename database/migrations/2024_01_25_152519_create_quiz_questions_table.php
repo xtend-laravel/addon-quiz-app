@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xtend_answers', function (Blueprint $table) {
+        Schema::create('xtend_quiz_questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('question_id')->constrained();
+            $table->foreignId('quiz_id')->constrained('xtend_quizzes');
             $table->string('handle');
             $table->json('name')->nullable();
             $table->timestamps();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('xtend_answers');
+        Schema::dropIfExists('xtend_quiz_questions');
     }
 };

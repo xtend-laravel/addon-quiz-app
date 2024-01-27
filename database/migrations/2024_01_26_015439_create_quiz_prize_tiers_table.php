@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('xtend_quiz_prize_tiers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('quiz_id')->constrained();
-            $table->foreignId('discount_id')->constrained();
+            $table->foreignId('quiz_id')->constrained('xtend_quizzes');
+            $table->foreignId('discount_id')->constrained('lunar_discounts')->nullable();
             $table->string('name');
-            $table->integer('percentage_off');
+            $table->integer('percentage_off')->nullable();
             $table->json('rules')->nullable();
             $table->timestamps();
         });

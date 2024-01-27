@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('xtend_user_responses', function (Blueprint $table) {
+        Schema::create('xtend_quiz_user_responses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('question_id')->constrained();
-            $table->foreignId('answer_id')->constrained();
+            $table->foreignId('question_id')->constrained('xtend_quiz_questions');
+            $table->foreignId('answer_id')->constrained('xtend_quiz_answers');
             $table->integer('answered_duration');
             $table->datetime('answered_at');
             $table->timestamps();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('xtend_user_responses');
+        Schema::dropIfExists('xtend_quiz_user_responses');
     }
 };

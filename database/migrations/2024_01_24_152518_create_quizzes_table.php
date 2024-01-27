@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('xtend_quizzes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->json('name')->nullable();
             $table->json('content')->nullable();
             $table->string('featured_image')->nullable();
-            $table->integer('question_duration');
-            $table->dateTime('starts_at');
-            $table->dateTime('ends_at');
+            $table->integer('question_duration')->default(5);
+            $table->dateTime('starts_at')->nullable();
+            $table->dateTime('ends_at')->nullable();
             $table->timestamps();
         });
     }
