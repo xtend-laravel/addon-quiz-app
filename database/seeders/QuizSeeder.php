@@ -5,11 +5,12 @@ namespace QuizApp\Database\Seeders;
 use Illuminate\Database\Seeder;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
-use XtendLunar\Addons\QuizApp\Models\Answers;
+use XtendLunar\Addons\QuizApp\Models\QuizAnswer;
 
-use XtendLunar\Addons\QuizApp\Models\QuizPrizeTiers;
+use XtendLunar\Addons\QuizApp\Models\QuizPrizeTier;
 use XtendLunar\Addons\QuizApp\Models\UserQuizProgress;
-use XtendLunar\Addons\QuizApp\Models\UserResponses;
+use XtendLunar\Addons\QuizApp\Models\UserResponse;
+use function Amp\Parallel\Worker\factory;
 
 class QuizSeeder extends Seeder
 {
@@ -20,18 +21,19 @@ class QuizSeeder extends Seeder
      */
     public function run()
     {
-        $answers = Answers::factory()->count(4);
-
-        $questions = QuizQuestion::factory()->count(50)
-            ->has($answers)
-            ->create();
-
         $quiz = Quiz::factory()->count(6)
-            ->has($questions)
+            ->has(
+                factory: QuizQuestion::factory()
+                    ->count(50)
+                    ->has(
+                        factory: QuizAnswer::factory()->count(4)
+                    )
+            )
             ->create();
 
-        Quiz::factory()->count(6)->create();
-        UserResponses::factory()->count(6)->create();
-        QuizPrizeTiers::factory()->count(6)->create();
+        // @todo UserResponse and QuizPrizeTier should be a relationship to Quiz
+
+        UserResponse::factory()->count(6)->create();
+        QuizPrizeTier::factory()->count(6)->create();
     }
 }

@@ -6,29 +6,33 @@ use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use QuizApp\Database\Factories\QuizQuestionFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Lunar\Models\Discount;
+use QuizApp\Database\Factories\QuizPrizeTierFactory;
 
-class QuizQuestion extends Model
+class QuizPrizeTier extends Model
 {
     use HasFactory;
 
-    protected $table = 'xtend_quiz_questions';
+    protected $table = 'xtend_quiz_prize_tiers';
 
     protected $fillable = [
         'quiz_id',
-        'correct_answer_id',
+        'discount_id',
         'handle',
-        'name'
+        'name',
+        'percentage_off',
+        'rules'
     ];
 
     protected $casts = [
         'name' => AsCollection::class,
+        'rules' => 'json',
     ];
 
-    protected static function newFactory(): QuizQuestionFactory
+    protected static function newFactory(): QuizPrizeTierFactory
     {
-        return QuizQuestionFactory::new();
+        return QuizPrizeTierFactory::new();
     }
 
     public function quiz(): BelongsTo
@@ -36,13 +40,8 @@ class QuizQuestion extends Model
         return $this->belongsTo(Quiz::class);
     }
 
-    public function answers(): HasMany
+    public function discount(): HasOne
     {
-        return $this->hasMany(QuizAnswer::class);
-    }
-
-    public function quizAnswers(): HasMany
-    {
-        return $this->hasMany(QuizAnswer::class);
+        return $this->hasOne(Discount::class);
     }
 }

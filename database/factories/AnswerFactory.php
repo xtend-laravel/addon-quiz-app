@@ -3,24 +3,24 @@
 namespace QuizApp\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use XtendLunar\Addons\QuizApp\Models\Answers;
+use Lunar\FieldTypes\Text;
+use Lunar\FieldTypes\TranslatedText;
+use XtendLunar\Addons\QuizApp\Models\QuizAnswer;
+use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
 
 class AnswerFactory extends Factory
 {
-    protected $model = Answers::class;
+    protected $model = QuizAnswer::class;
 
     public function definition(): array
     {
-        // $quizQuestionIds = \XtendLunar\Addons\QuizApp\Models\QuizQuestion::pluck('id')->toArray();
-        
         return [
-            'question_id' => \XtendLunar\Addons\QuizApp\Models\QuizQuestion::factory(),
+            'quiz_question_id' => QuizQuestion::query()->inRandomOrder()->first()->id,
             'handle' => $this->faker->word,
-            'name' => [
-                'en' => $this->faker->sentence,
-                'ar' => $this->faker->sentence,
-                'fr' => $this->faker->sentence,
-            ]
+            'is_correct' => $this->faker->boolean(10),
+            'name' => new TranslatedText([
+                'en' => new Text($this->faker->sentence),
+            ]),
         ];
     }
 }

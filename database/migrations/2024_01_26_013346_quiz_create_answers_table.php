@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('xtend_quiz_answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('question_id')->constrained('xtend_quiz_questions');
+            $table->foreignId('quiz_question_id')->constrained('xtend_quiz_questions');
             $table->string('handle');
             $table->json('name')->nullable();
             $table->boolean('is_correct')->default(false);

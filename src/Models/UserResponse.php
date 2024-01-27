@@ -2,19 +2,17 @@
 
 namespace XtendLunar\Addons\QuizApp\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use QuizApp\Database\Factories\UserResponsesFactory;
 
-class UserResponses extends Model
+class UserResponse extends Model
 {
     use HasFactory;
 
-    protected $table = 'xtend_user_responses';
-
-    protected $casts = [
-    ];
+    protected $table = 'xtend_quiz_user_responses';
 
     protected $fillable = [
         'user_id',
@@ -36,11 +34,11 @@ class UserResponses extends Model
 
     public function question(): belongsTo
     {
-        return $this->belongsTo(Question::class);
+        return $this->belongsTo(QuizQuestion::class);
     }
 
     public function answer(): belongsTo
     {
-        return $this->belongsTo(Answer::class);
+        return $this->belongsTo(QuizAnswer::class);
     }
 }

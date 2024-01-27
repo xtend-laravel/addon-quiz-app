@@ -2,7 +2,9 @@
 
 namespace QuizApp\Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\UserQuizProgress;
 
 class UserQuizProgressFactory extends Factory
@@ -11,14 +13,11 @@ class UserQuizProgressFactory extends Factory
 
     public function definition(): array
     {
-        $userIds = \App\Models\User::pluck('id')->toArray();
-        $quizIds = \XtendLunar\Addons\QuizApp\Models\Quiz::pluck('id')->toArray();
-
         return [
-            'user_id' => $this->faker->randomElement($userIds),
-            'quiz_id' => $this->faker->randomElement($quizIds),
+            'user_id' => User::query()->inRandomOrder()->first()->id,
+            'quiz_id' => Quiz::query()->inRandomOrder()->first()->id,
             'progress' => $this->faker->numberBetween(0, 100),
-            'elapsed_time' => $this->faker->numberBetween(1, 3600),
+            'elapsed_time' => $this->faker->numberBetween(10, 3600),
         ];
     }
 }

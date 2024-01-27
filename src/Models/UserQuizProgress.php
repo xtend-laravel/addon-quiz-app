@@ -2,6 +2,7 @@
 
 namespace XtendLunar\Addons\QuizApp\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,10 +12,7 @@ class UserQuizProgress extends Model
 {
     use HasFactory;
 
-    protected $table = 'xtend_user_quiz_progress';
-
-    protected $casts = [
-    ];
+    protected $table = 'xtend_quiz_user_progress';
 
     protected $fillable = [
         'user_id',

@@ -3,6 +3,9 @@
 namespace QuizApp\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Lunar\FieldTypes\Text;
+use Lunar\FieldTypes\TranslatedText;
+use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
 
 class QuizQuestionFactory extends Factory
@@ -11,17 +14,12 @@ class QuizQuestionFactory extends Factory
 
     public function definition(): array
     {
-        $answerIds = \XtendLunar\Addons\QuizApp\Models\Answers::pluck('id')->toArray();
-        
         return [
-            'quiz_id' => \XtendLunar\Addons\QuizApp\Models\Quiz::factory(),
-            'correct_answer_id' => $this->faker->randomElement($answerIds),
+            'quiz_id' => Quiz::query()->inRandomOrder()->first()->id,
             'handle' => $this->faker->word,
-            'name' => [
-                'en' => $this->faker->sentence,
-                'ar' => $this->faker->sentence,
-                'fr' => $this->faker->sentence,
-            ]
+            'name' => new TranslatedText([
+                'en' => new Text($this->faker->sentence),
+            ]),
         ];
     }
 }

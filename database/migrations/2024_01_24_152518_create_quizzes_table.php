@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('xtend_quizzes', function (Blueprint $table) {
             $table->id();
+            $table->string('handle')->unique();
             $table->json('name')->nullable();
             $table->json('content')->nullable();
             $table->string('featured_image')->nullable();
