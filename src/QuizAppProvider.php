@@ -15,6 +15,7 @@ use XtendLunar\Addons\QuizApp\Livewire\Quiz\Table;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
 use XtendLunar\Addons\QuizApp\Policies\QuizPolicy;
+use XtendLunar\Addons\QuizApp\Policies\QuizQuestionPolicy;
 
 class QuizAppProvider extends XtendAddonProvider
 {
@@ -22,7 +23,7 @@ class QuizAppProvider extends XtendAddonProvider
 
     protected $policies = [
         Quiz::class => QuizPolicy::class,
-        QuizQuestion::class => QuizPolicy::class,
+        QuizQuestion::class => QuizQuestionPolicy::class,
     ];
 
     public function register()

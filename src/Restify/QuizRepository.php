@@ -17,19 +17,10 @@ class QuizRepository extends Repository
 
     public static string $model = Quiz::class;
 
-    public static bool|array $public = true;
-
     public static function related(): array
     {
         return [
-            HasMany::make('questions', QuestionRepository::class),
-        ];
-    }
-
-    public function getters(RestifyRequest $request): array
-    {
-        return [
-            UserQuizResults::new(),
+            HasMany::make('quizQuestions', QuestionRepository::class),
         ];
     }
 

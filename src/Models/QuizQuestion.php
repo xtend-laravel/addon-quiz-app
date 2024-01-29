@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Lunar\Base\Traits\HasTranslations;
 use QuizApp\Database\Factories\QuizQuestionFactory;
 
 class QuizQuestion extends Model
 {
     use HasFactory;
+    use HasTranslations;
 
     protected $table = 'xtend_quiz_questions';
 

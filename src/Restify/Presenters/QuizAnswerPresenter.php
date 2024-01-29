@@ -6,13 +6,10 @@ use XtendLunar\Addons\RestifyApi\Restify\Contracts\Presentable;
 use Binaryk\LaravelRestify\Http\Requests\RestifyRequest;
 use XtendLunar\Addons\RestifyApi\Restify\Presenters\PresenterResource;
 
-class QuestionPresenter extends PresenterResource implements Presentable
+class QuizAnswerPresenter extends PresenterResource implements Presentable
 {
     public function transform(RestifyRequest $request): array
     {
-        return [
-            ...$this->data,
-            'answers' => $this->getter($request, 'quiz-answers'),
-        ];
+        return $this->data;
     }
 }

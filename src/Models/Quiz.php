@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Lunar\Base\Traits\HasTranslations;
 use QuizApp\Database\Factories\QuizFactory;
 
 /**
@@ -20,6 +21,7 @@ use QuizApp\Database\Factories\QuizFactory;
 class Quiz extends Model
 {
     use HasFactory;
+    use HasTranslations;
 
     protected $table = 'xtend_quizzes';
 
@@ -44,7 +46,7 @@ class Quiz extends Model
         return QuizFactory::new();
     }
 
-    public function quizQuestion(): HasMany
+    public function quizQuestions(): HasMany
     {
         return $this->hasMany(QuizQuestion::class);
     }
