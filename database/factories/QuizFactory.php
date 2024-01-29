@@ -28,6 +28,7 @@ class QuizFactory extends Factory
             ]),
             'featured_image' => $this->faker->imageUrl(),
             'question_duration' => $this->faker->numberBetween(1, 60),
+            'active' => $this->faker->boolean(10),
             'starts_at' => $lastQuiz ? $lastQuiz->starts_at->addMonth() : $this->faker->dateTimeThisMonth(),
             'ends_at' => $lastQuiz ? $lastQuiz->ends_at->addMonths(2) : $this->faker->dateTimeThisMonth('+1 month'),
         ];

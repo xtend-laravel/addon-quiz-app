@@ -30,12 +30,14 @@ class Quiz extends Model
         'content',
         'featured_image',
         'question_duration',
+        'active',
         'starts_at',
         'ends_at',
     ];
 
     protected $casts = [
         'name' => AsCollection::class,
+        'active' => 'boolean',
         'content' => 'array',
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',

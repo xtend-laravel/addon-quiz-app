@@ -18,6 +18,7 @@ return new class extends Migration
             $table->json('content')->nullable();
             $table->string('featured_image')->nullable();
             $table->integer('question_duration')->default(5);
+            $table->boolean('active')->default(false);
             $table->dateTime('starts_at')->nullable();
             $table->dateTime('ends_at')->nullable();
             $table->timestamps();
