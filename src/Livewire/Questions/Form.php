@@ -4,6 +4,7 @@ namespace XtendLunar\Addons\QuizApp\Livewire\Questions;
 
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Toggle;
+use Illuminate\Support\Collection;
 use Lunar\Models\Language;
 use XtendLunar\Addons\PageBuilder\Fields\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -23,18 +24,10 @@ class Form extends Component implements HasForms
 
     public ?QuizQuestion $question = null;
 
-    public $answers;
-
     public function mount(): void
     {
         $state = $this->question ? [
             'name' => $this->question->name,
-            'answers' => $this->question->answers->map(fn(QuizAnswer $answer) => [
-                ...Language::all()->mapWithKeys(fn(Language $language) => [
-                    'name.' . $language->code => $answer?->translate('name', $language->code),
-                ])->toArray(),
-                'is_correct' => $answer->is_correct,
-            ])->toArray(),
         ] : [];
 
         $this->form->fill($state);
@@ -50,6 +43,7 @@ class Form extends Component implements HasForms
         return [
             TextInput::make('name')->translatable(),
             Repeater::make('answers')
+                ->saveRelationshipsWhenHidden()
                 ->relationship()
                 ->schema([
                     TextInput::make('name')->translatable(),
@@ -64,7 +58,24 @@ class Form extends Component implements HasForms
 
     public function submit()
     {
-        dd($this->form->getState());
+        $this->question ? $this->update() : $this->create();
+
+        $this->redirect(route('hub.quiz-app.edit', $this->quiz));
+    }
+
+    public function create(): void
+    {
+        /** @var QuizQuestion $question */
+        $question = QuizQuestion::query()->create($this->form->getState());
+
+        $this->notify($question->translate('name').' quiz created');
+    }
+
+    public function update(): void
+    {
+        $this->question->update($this->form->getState());
+
+        $this->notify($this->question->translate('name').' quiz updated');
     }
 
     public function render()
