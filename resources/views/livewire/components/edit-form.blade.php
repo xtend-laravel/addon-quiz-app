@@ -9,7 +9,7 @@
         }">
         <div class="flex justify-end gap-6">
             <x-hub::button type="submit">
-                {{ __('Save Quiz') }}
+                {{ __('Save') }}
             </x-hub::button>
         </div>
     </div>

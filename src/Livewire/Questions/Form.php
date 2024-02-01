@@ -27,7 +27,7 @@ class Form extends Component implements HasForms
     public function mount(): void
     {
         $state = $this->question ? [
-            'name' => $this->question->name,
+            'name' => $this->question->name ?? null,
         ] : [];
 
         $this->form->fill($state);
@@ -35,7 +35,7 @@ class Form extends Component implements HasForms
 
     protected function getFormModel(): QuizQuestion
     {
-        return $this->question->loadMissing('answers') ?? new QuizQuestion();
+        return $this->question ?? new QuizQuestion();
     }
 
     public function getFormSchema(): array
@@ -49,10 +49,11 @@ class Form extends Component implements HasForms
                     TextInput::make('name')->translatable(),
                     Toggle::make('is_correct'),
                 ])
+                ->maxItems(4)
                 ->grid(4)
                 ->defaultItems(4)
-                ->disableItemCreation()
-                ->disableItemDeletion(),
+                ->disableItemCreation($this->question?->answers?->count() >= 4)
+                ->disableItemDeletion($this->question?->answers?->count() >= 4),
         ];
     }
 
@@ -66,7 +67,9 @@ class Form extends Component implements HasForms
     public function create(): void
     {
         /** @var QuizQuestion $question */
-        $question = QuizQuestion::query()->create($this->form->getState());
+        $question = $this->quiz->quizQuestions()->create($this->form->getState());
+
+        $this->form->model($question)->saveRelationships();
 
         $this->notify($question->translate('name').' quiz created');
     }
