@@ -2,11 +2,9 @@
 
 namespace XtendLunar\Addons\QuizApp\Livewire\Quiz;
 
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -30,8 +28,8 @@ class Table extends Component implements HasTable
         return [
             ImageColumn::make('featured_image'),
             TextColumn::make('name.en'),
-            TextColumn::make('handle'),
-            TextColumn::make('content')->wrap(),
+            TextColumn::make('heading.en'),
+            TextColumn::make('sub_heading.en'),
             TextColumn::make('question_duration'),
             TextColumn::make('starts_at'),
             TextColumn::make('ends_at'),
@@ -41,7 +39,6 @@ class Table extends Component implements HasTable
     public function getTableActions(): array
     {
         return [
-            ViewAction::make()->url(fn($record) => route('hub.quiz-app.show', $record)),
             EditAction::make()->url(fn($record) => route('hub.quiz-app.edit', $record)),
             DeleteAction::make()->requiresConfirmation(),
         ];

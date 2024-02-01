@@ -23,12 +23,17 @@ class QuizFactory extends Factory
             'name' => new TranslatedText([
                 'en' => new Text($name),
             ]),
+            'heading' => new TranslatedText([
+                'en' => new Text($this->faker->sentence),
+            ]),
+            'sub_heading' => new TranslatedText([
+                'en' => new Text($this->faker->sentence),
+            ]),
             'content' => new TranslatedText([
                 'en' => new Text($this->faker->paragraph),
             ]),
             'featured_image' => $this->faker->imageUrl(),
             'question_duration' => $this->faker->numberBetween(1, 60),
-            'active' => $this->faker->boolean(10),
             'starts_at' => $lastQuiz ? $lastQuiz->starts_at->addMonth() : $this->faker->dateTimeThisMonth(),
             'ends_at' => $lastQuiz ? $lastQuiz->ends_at->addMonths(2) : $this->faker->dateTimeThisMonth('+1 month'),
         ];

@@ -27,6 +27,8 @@ class Quiz extends Model
 
     protected $fillable = [
         'name',
+        'heading',
+        'sub_heading',
         'content',
         'featured_image',
         'question_duration',
@@ -37,8 +39,10 @@ class Quiz extends Model
 
     protected $casts = [
         'name' => AsCollection::class,
+        'heading' => AsCollection::class,
+        'sub_heading' => AsCollection::class,
+        'content' => AsCollection::class,
         'active' => 'boolean',
-        'content' => 'array',
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
     ];

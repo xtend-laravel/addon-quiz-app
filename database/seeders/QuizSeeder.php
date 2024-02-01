@@ -8,9 +8,7 @@ use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
 use XtendLunar\Addons\QuizApp\Models\QuizAnswer;
 
 use XtendLunar\Addons\QuizApp\Models\QuizPrizeTier;
-use XtendLunar\Addons\QuizApp\Models\UserQuizProgress;
 use XtendLunar\Addons\QuizApp\Models\UserResponse;
-use function Amp\Parallel\Worker\factory;
 
 class QuizSeeder extends Seeder
 {
@@ -21,7 +19,7 @@ class QuizSeeder extends Seeder
      */
     public function run()
     {
-        $quiz = Quiz::factory()->count(6)
+        $quizzes = Quiz::factory()->count(6)
             ->has(
                 factory: QuizQuestion::factory()
                     ->count(50)
@@ -30,6 +28,8 @@ class QuizSeeder extends Seeder
                     )
             )
             ->create();
+
+        $quizzes->last()->update(['active' => true]);
 
         // @todo UserResponse and QuizPrizeTier should be a relationship to Quiz
 

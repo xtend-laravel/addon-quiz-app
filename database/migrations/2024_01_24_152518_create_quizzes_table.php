@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('handle')->unique();
             $table->json('name')->nullable();
+            $table->json('heading')->nullable();
+            $table->json('sub_heading')->nullable();
             $table->json('content')->nullable();
+            $table->string('theme_style')->nullable();
             $table->string('featured_image')->nullable();
             $table->integer('question_duration')->default(5);
             $table->boolean('active')->default(false);
