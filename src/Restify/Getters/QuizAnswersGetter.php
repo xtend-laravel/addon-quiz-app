@@ -22,7 +22,6 @@ class QuizAnswersGetter extends Getter
             $question->answers->map(fn (QuizAnswer $answer) => [
                 'id' => $answer->id,
                 'answer' => $answer->translate('name'),
-                'is_correct' => $answer->is_correct,
             ]),
         ]);
     }
