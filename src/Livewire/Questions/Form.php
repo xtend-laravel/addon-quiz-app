@@ -2,66 +2,69 @@
 
 namespace XtendLunar\Addons\QuizApp\Livewire\Questions;
 
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Toggle;
+use Lunar\Models\Language;
 use XtendLunar\Addons\PageBuilder\Fields\TextInput;
-use XtendLunar\Addons\PageBuilder\Fields\TextArea;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Components\Card;
 use Livewire\Component;
 use Lunar\Hub\Http\Livewire\Traits\Notifies;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
+use XtendLunar\Addons\QuizApp\Models\QuizAnswer;
+use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
 
 class Form extends Component implements HasForms
 {
     use InteractsWithForms;
-
     use Notifies;
 
     public Quiz $quiz;
 
+    public ?QuizQuestion $question = null;
+
+    public $answers;
+
     public function mount(): void
     {
-        $this->form->fill([
-            'name' => $this->quiz->name,
-            'heading' => $this->quiz->heading,
-            'sub_heading' => $this->quiz->sub_heading,
-            'content' => $this->quiz->content,
-            'featured_image' => $this->quiz->featured_image,
-            'question_duration' => $this->quiz->question_duration,
-            'starts_at' => $this->quiz->starts_at,
-            'ends_at' => $this->quiz->ends_at,
-        ]);
+        $state = $this->question ? [
+            'name' => $this->question->name,
+            'answers' => $this->question->answers->map(fn(QuizAnswer $answer) => [
+                ...Language::all()->mapWithKeys(fn(Language $language) => [
+                    'name.' . $language->code => $answer?->translate('name', $language->code),
+                ])->toArray(),
+                'is_correct' => $answer->is_correct,
+            ])->toArray(),
+        ] : [];
+
+        $this->form->fill($state);
+    }
+
+    protected function getFormModel(): QuizQuestion
+    {
+        return $this->question->loadMissing('answers') ?? new QuizQuestion();
     }
 
     public function getFormSchema(): array
     {
         return [
-            Card::make()->columns(3)->schema([
-                TextInput::make('name')->translatable(),
-                TextInput::make('heading')->translatable(),
-                TextInput::make('sub_heading')->translatable(),
-                Textarea::make('content')->translatable()->columnSpanFull(),
-                FileUpload::make('featured_image')->image()->columnSpanFull(),
-                Card::make()
-                    ->schema([
-                        TextInput::make('question_duration')->numeric()->required(),
-                        DateTimePicker::make('starts_at')->required(),
-                        DateTimePicker::make('ends_at')->required(),
-                    ])
-                    ->columns(3),
-            ]),
+            TextInput::make('name')->translatable(),
+            Repeater::make('answers')
+                ->relationship()
+                ->schema([
+                    TextInput::make('name')->translatable(),
+                    Toggle::make('is_correct'),
+                ])
+                ->grid(4)
+                ->defaultItems(4)
+                ->disableItemCreation()
+                ->disableItemDeletion(),
         ];
     }
 
     public function submit()
     {
-        $quiz = Quiz::create($this->form->getState());
-
-        $this->notify($quiz->name.' quiz updated');
-
-        $this->redirect(route('hub.quiz-app.index'));
+        dd($this->form->getState());
     }
 
     public function render()

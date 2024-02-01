@@ -18,7 +18,6 @@ use XtendLunar\Addons\QuizApp\Models\Quiz;
 class Form extends Component implements HasForms
 {
     use InteractsWithForms;
-
     use Notifies;
 
     public ?Quiz $quiz = null;

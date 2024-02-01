@@ -39,7 +39,7 @@ class Table extends Component implements HasTable
     public function getTableActions(): array
     {
         return [
-            EditAction::make()->url(fn($record) => route('hub.quiz-app.edit', $record)),
+            EditAction::make()->url(fn($record) => route('hub.quiz-app.edit-question', ['quiz' => $this->quiz, 'question' => $record])),
             DeleteAction::make()->requiresConfirmation(),
         ];
     }

@@ -19,7 +19,7 @@
         </strong>
 
         <div class="text-right">
-            <x-hub::button tag="a" href="{{ route('hub.quiz-app.index') }}">
+            <x-hub::button tag="a" href="{{ route('hub.quiz-app.create-question', ['quiz' => $this->quiz]) }}">
                 {{ __('Create Question') }}
             </x-hub::button>
         </div>

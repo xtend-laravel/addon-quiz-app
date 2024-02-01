@@ -3,7 +3,6 @@
 namespace XtendLunar\Addons\QuizApp\Livewire\Pages;
 
 use Livewire\Component;
-use XtendLunar\Addons\QuizApp\Models\Quiz;
 
 class QuizAppCreate extends Component
 {
