@@ -11,7 +11,10 @@ use Livewire\Livewire;
 use Lunar\Hub\Facades\Menu;
 use Lunar\Hub\Menu\MenuLink;
 use QuizApp\Database\Seeders\QuizSeeder;
-use XtendLunar\Addons\QuizApp\Livewire\Quiz\Table;
+use XtendLunar\Addons\QuizApp\Livewire\Quizzes\Form as QuizForm;
+use XtendLunar\Addons\QuizApp\Livewire\Quizzes\Table as QuizTable;
+use XtendLunar\Addons\QuizApp\Livewire\Questions\Form as QuestionForm;
+use XtendLunar\Addons\QuizApp\Livewire\Questions\Table as QuestionTable;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
 use XtendLunar\Addons\QuizApp\Policies\QuizPolicy;
@@ -72,7 +75,10 @@ class QuizAppProvider extends XtendAddonProvider
 
     protected function registerLivewireComponents(): void
     {
-        Livewire::component('xtend-lunar::quiz-app.quizzes.table', Table::class);
+        Livewire::component('xtend-lunar::quiz-app.quizzes.table', QuizTable::class);
+        Livewire::component('xtend-lunar::quiz-app.quizzes.form', QuizForm::class);
+        Livewire::component('xtend-lunar::quiz-app.questions.table', QuestionTable::class);
+        Livewire::component('xtend-lunar::quiz-app.questions.form', QuestionForm::class);
     }
 
     protected function registerPolicies()
