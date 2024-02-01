@@ -7,6 +7,7 @@ use Binaryk\LaravelRestify\Http\Requests\GetterRequest;
 use Binaryk\LaravelRestify\Http\Requests\RestifyRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
+use Xtend\Extensions\Lunar\Core\Models\Cart;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\QuizAnswer;
 use XtendLunar\Addons\QuizApp\Restify\QuizRepository;
@@ -23,10 +24,16 @@ class QuizRandomQuestionGetter extends Getter
         $excludeQuestionIds = Str::of($request->input('exclude_question_ids'))->explode(',')->filter();
 
         /** @var \XtendLunar\Addons\QuizApp\Models\QuizQuestion $question */
-        $question = $quiz->quizQuestions()
-            ->whereNotIn('id', $excludeQuestionIds)
-            ->inRandomOrder()
-            ->first();
+        try {
+            $question = $quiz->quizQuestions()
+                ->whereNotIn('id', $excludeQuestionIds)
+                ->inRandomOrder()
+                ->firstOrFail();
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 422);
+        }
 
         return response()->json([
             'id' => $question->id,
