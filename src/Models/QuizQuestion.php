@@ -50,8 +50,10 @@ class QuizQuestion extends Model
     public function checkCorrectAnswer(int $answerId): bool
     {
         return $this->quizAnswers()
-            ->find($answerId)
-            ->where('is_correct', true)
+            ->where([
+                'id' => $answerId,
+                'is_correct' => true,
+            ])
             ->exists();
     }
 }

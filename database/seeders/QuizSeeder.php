@@ -8,7 +8,7 @@ use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
 use XtendLunar\Addons\QuizApp\Models\QuizAnswer;
 
 use XtendLunar\Addons\QuizApp\Models\QuizPrizeTier;
-use XtendLunar\Addons\QuizApp\Models\UserResponse;
+use XtendLunar\Addons\QuizApp\Models\QuizUserResponse;
 
 class QuizSeeder extends Seeder
 {
@@ -31,9 +31,11 @@ class QuizSeeder extends Seeder
 
         $quizzes->last()->update(['active' => true]);
 
-        // @todo UserResponse and QuizPrizeTier should be a relationship to Quiz
+        QuizQuestion::all()->each(function ($question) {
+            $question->answers()->inRandomOrder()->first()->update(['is_correct' => true]);
+        });
 
-        UserResponse::factory()->count(6)->create();
+        QuizUserResponse::factory()->count(6)->create();
         QuizPrizeTier::factory()->count(6)->create();
     }
 }

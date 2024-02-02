@@ -43,14 +43,14 @@ class ValidateUserQuizAction extends Action
 
     protected function calculateScore(): void
     {
-        $questionsNb = $this->userResponse->payload->count();
+        $questionsNb = $this->payload->count();
         $correctAnswersNb = $this->payload->filter(function ($item) {
             $question = QuizQuestion::find($item['question_id']);
             return $question->checkCorrectAnswer($item['answer_id']);
         })->count();
 
         $this->userResponse->update([
-            'total_score' => ($correctAnswersNb / $questionsNb) * 100,
+            'total_score' => round(($correctAnswersNb / $questionsNb) * 100),
         ]);
     }
 }
