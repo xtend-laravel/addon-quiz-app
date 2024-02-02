@@ -46,4 +46,12 @@ class QuizQuestion extends Model
     {
         return $this->hasMany(QuizAnswer::class);
     }
+
+    public function checkCorrectAnswer(int $answerId): bool
+    {
+        return $this->quizAnswers()
+            ->find($answerId)
+            ->where('is_correct', true)
+            ->exists();
+    }
 }
