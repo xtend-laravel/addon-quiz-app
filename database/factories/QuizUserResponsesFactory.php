@@ -5,11 +5,11 @@ namespace QuizApp\Database\Factories;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
-use XtendLunar\Addons\QuizApp\Models\UserResponse;
+use XtendLunar\Addons\QuizApp\Models\QuizUserResponse;
 
 class UserResponsesFactory extends Factory
 {
-    protected $model = UserResponse::class;
+    protected $model = QuizUserResponse::class;
 
     public function definition(): array
     {
@@ -17,10 +17,13 @@ class UserResponsesFactory extends Factory
 
         return [
             'user_id' => User::query()->inRandomOrder()->first()->id,
-            'question_id' => $question->id,
-            'answer_id' => $question->answers()->inRandomOrder()->first()?->id,
-            'answered_duration' => $this->faker->numberBetween(1, 300),
-            'answered_at' => $this->faker->dateTimeThisYear(),
+            'payload' => [
+                'question_id' => $question->id,
+                'answer_id' => $question->answers->random()->id ?? null,
+                'elapse_time' => rand(1, 10),
+            ],
+            'total_score' => rand(20, 100),
+            'total_elapsed_time' => rand(20, 100),
         ];
     }
 }

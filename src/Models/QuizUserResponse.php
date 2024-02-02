@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use QuizApp\Database\Factories\UserResponsesFactory;
 
-class UserResponse extends Model
+class QuizUserResponse extends Model
 {
     use HasFactory;
 
@@ -16,10 +16,15 @@ class UserResponse extends Model
 
     protected $fillable = [
         'user_id',
-        'question_id',
-        'answer_id',
-        'answered_duration',
-        'answered_at'
+        'payload',
+        'total_score',
+        'total_elapsed_time',
+        'completed_at',
+    ];
+
+    protected $casts = [
+        'payload' => 'array',
+        'completed_at' => 'datetime',
     ];
 
     protected static function newFactory(): UserResponsesFactory
@@ -30,15 +35,5 @@ class UserResponse extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function question(): belongsTo
-    {
-        return $this->belongsTo(QuizQuestion::class);
-    }
-
-    public function answer(): belongsTo
-    {
-        return $this->belongsTo(QuizAnswer::class);
     }
 }

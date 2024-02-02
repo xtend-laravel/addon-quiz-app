@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('xtend_quiz_user_responses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('question_id')->constrained('xtend_quiz_questions');
-            $table->foreignId('answer_id')->constrained('xtend_quiz_answers');
-            $table->integer('answered_duration');
-            $table->datetime('answered_at');
+            $table->json('payload')->nullable();
+            $table->integer('total_score')->default(0);
+            $table->integer('total_elapsed_time')->default(0);
+            $table->datetime('completed_at')->nullable();
             $table->timestamps();
         });
     }
