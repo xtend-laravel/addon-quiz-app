@@ -4,8 +4,8 @@ namespace XtendLunar\Addons\QuizApp\Restify;
 
 use Binaryk\LaravelRestify\Fields\HasMany;
 use Binaryk\LaravelRestify\Http\Requests\RestifyRequest;
-use XtendLunar\Addons\QuizApp\Restify\Actions\GenerateUserDiscountAction;
 use XtendLunar\Addons\QuizApp\Restify\Actions\ValidateUserQuizAction;
+use XtendLunar\Addons\QuizApp\Restify\Getters\CurrentRunningQuizGetter;
 use XtendLunar\Addons\QuizApp\Restify\Getters\QuizRandomQuestionGetter;
 use XtendLunar\Addons\RestifyApi\Restify\Repository;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
@@ -27,6 +27,7 @@ class QuizRepository extends Repository
     public function getters(RestifyRequest $request): array
     {
         return [
+            CurrentRunningQuizGetter::make()->onlyOnIndex(),
             QuizRandomQuestionGetter::make()->onlyOnShow(),
         ];
     }
