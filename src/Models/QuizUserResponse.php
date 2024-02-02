@@ -16,6 +16,7 @@ class QuizUserResponse extends Model
 
     protected $fillable = [
         'user_id',
+        'quiz_id',
         'payload',
         'total_score',
         'total_elapsed_time',
@@ -35,5 +36,10 @@ class QuizUserResponse extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function quiz(): BelongsTo
+    {
+        return $this->belongsTo(Quiz::class);
     }
 }

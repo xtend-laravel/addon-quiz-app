@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('xtend_quiz_user_responses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
+            $table->foreignId('quiz_id')->constrained('xtend_quizzes');
             $table->json('payload')->nullable();
             $table->integer('total_score')->default(0);
             $table->integer('total_elapsed_time')->default(0);

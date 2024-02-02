@@ -56,4 +56,9 @@ class Quiz extends Model
     {
         return $this->hasMany(QuizQuestion::class);
     }
+
+    public function responses(): HasMany
+    {
+        return $this->hasMany(QuizUserResponse::class);
+    }
 }
