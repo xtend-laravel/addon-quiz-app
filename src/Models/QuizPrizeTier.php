@@ -31,6 +31,8 @@ class QuizPrizeTier extends Model
         'rules' => 'json',
     ];
 
+    protected $with = ['discount'];
+
     protected static function newFactory(): QuizPrizeTierFactory
     {
         return QuizPrizeTierFactory::new();

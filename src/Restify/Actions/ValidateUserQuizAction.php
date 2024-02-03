@@ -33,8 +33,8 @@ class ValidateUserQuizAction extends Action
 
         return data([
             'message' => $this->message,
+            'score' => $this->userResponse->total_score,
             'price_tier' => $this->checkPriceTierEligibility(),
-            'data' => $this->userResponse,
         ]);
     }
 
