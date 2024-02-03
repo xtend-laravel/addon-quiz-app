@@ -91,6 +91,6 @@ class ValidateUserQuizAction extends Action
 
         $this->message = 'You are eligible for the lowest prize tier';
 
-        return $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'taking_part');
+        return $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'participation');
     }
 }

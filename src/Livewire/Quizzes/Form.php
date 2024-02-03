@@ -145,7 +145,7 @@ class Form extends Component implements HasForms
                 ),
             ],
             [
-                'handle' => 'grand_place',
+                'handle' => 'grand_prize',
                 'name' => new TranslatedText(
                     collect([
                         'en' => 'Grand Prize',
