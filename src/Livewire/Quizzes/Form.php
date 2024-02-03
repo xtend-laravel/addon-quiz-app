@@ -86,8 +86,12 @@ class Form extends Component implements HasForms
 
     public function create(): void
     {
+        $state = $this->form->getState();
+
+        $state['handle'] = strtolower(str_replace(' ', '-', $state['name']['en']));
+
         /** @var Quiz $quiz */
-        $quiz = Quiz::query()->create($this->form->getState());
+        $quiz = Quiz::query()->create($state);
 
         $this->createPrizeTiers($quiz);
 

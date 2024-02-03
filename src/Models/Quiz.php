@@ -26,6 +26,7 @@ class Quiz extends Model
     protected $table = 'xtend_quizzes';
 
     protected $fillable = [
+        'handle',
         'name',
         'heading',
         'sub_heading',
