@@ -61,4 +61,9 @@ class Quiz extends Model
     {
         return $this->hasMany(QuizUserResponse::class);
     }
+
+    public function prizeTiers(): HasMany
+    {
+        return $this->hasMany(QuizPrizeTier::class);
+    }
 }

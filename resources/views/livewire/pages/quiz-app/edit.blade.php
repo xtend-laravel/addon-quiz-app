@@ -28,4 +28,20 @@
     <div class="pb-20">
         @livewire('xtend-lunar::quiz-app.questions.table', ['quiz' => $this->quiz])
     </div>
+
+    <div class="flex items-center justify-between">
+        <strong class="text-lg font-bold md:text-2xl">
+            {{ __('Prize Tiers') }}
+        </strong>
+
+        <div class="text-right">
+            <x-hub::button tag="a" href="{{ route('hub.quiz-app.create-prize-tier', ['quiz' => $this->quiz]) }}">
+                {{ __('Create Prize Tier') }}
+            </x-hub::button>
+        </div>
+    </div>
+
+    <div class="pb-20">
+        @livewire('xtend-lunar::quiz-app.prize-tiers.table', ['quiz' => $this->quiz])
+    </div>
 </div>

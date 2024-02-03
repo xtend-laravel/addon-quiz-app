@@ -5,6 +5,8 @@ namespace XtendLunar\Addons\QuizApp\Livewire\Quizzes;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Toggle;
+use Lunar\FieldTypes\Text;
+use Lunar\FieldTypes\TranslatedText;
 use Lunar\Models\Language;
 use XtendLunar\Addons\PageBuilder\Fields\TextInput;
 use XtendLunar\Addons\PageBuilder\Fields\RichEditor;
@@ -64,10 +66,10 @@ class Form extends Component implements HasForms
                     ->schema([
                         TextInput::make('question_duration')->numeric()->required(),
                         DateTimePicker::make('starts_at')
-                            ->minDate(now())
+                            ->minDate(today())
                             ->required(),
                         DateTimePicker::make('ends_at')
-                            ->minDate(now()->addMonth())
+                            ->minDate(today()->addMonth())
                             ->required(),
                     ])
                     ->columns(3),
@@ -87,6 +89,8 @@ class Form extends Component implements HasForms
         /** @var Quiz $quiz */
         $quiz = Quiz::query()->create($this->form->getState());
 
+        $this->createPrizeTiers($quiz);
+
         $this->notify($quiz->translate('name').' quiz created');
     }
 
@@ -101,5 +105,51 @@ class Form extends Component implements HasForms
     {
         return view('xtend-lunar-quiz-app::livewire.components.edit-form')
             ->layout('adminhub::layouts.app');
+    }
+
+    private function createPrizeTiers(Quiz $quiz): void
+    {
+        $quiz->prizeTiers()->createMany([
+            [
+                'handle' => 'participation',
+                'name' => new TranslatedText(
+                    collect([
+                        'en' => 'Participation Prize',
+                        'fr' => 'Prix de participation',
+                        'ar' => 'جائزة المشاركة',
+                    ]),
+                ),
+            ],
+            [
+                'handle' => 'third_place',
+                'name' => new TranslatedText(
+                    collect([
+                        'en' => '3rd Place Prize',
+                        'fr' => 'Prix de 3e place',
+                        'ar' => 'الجائزة الثالثة',
+                    ]),
+                ),
+            ],
+            [
+                'handle' => 'second_place',
+                'name' => new TranslatedText(
+                    collect([
+                        'en' => '2nd Place Prize',
+                        'fr' => 'Prix de 2e place',
+                        'ar' => 'الجائزة الثانية',
+                    ]),
+                ),
+            ],
+            [
+                'handle' => 'grand_place',
+                'name' => new TranslatedText(
+                    collect([
+                        'en' => 'Grand Prize',
+                        'fr' => 'Grand Prix',
+                        'ar' => 'الجائزة الكبرى',
+                    ]),
+                ),
+            ],
+        ]);
     }
 }

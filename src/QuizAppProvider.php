@@ -7,6 +7,7 @@ use CodeLabX\XtendLaravel\Base\XtendAddonProvider;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
 use Lunar\Hub\Facades\Menu;
 use Lunar\Hub\Menu\MenuLink;
@@ -15,6 +16,8 @@ use XtendLunar\Addons\QuizApp\Livewire\Quizzes\Form as QuizForm;
 use XtendLunar\Addons\QuizApp\Livewire\Quizzes\Table as QuizTable;
 use XtendLunar\Addons\QuizApp\Livewire\Questions\Form as QuestionForm;
 use XtendLunar\Addons\QuizApp\Livewire\Questions\Table as QuestionTable;
+use XtendLunar\Addons\QuizApp\Livewire\PrizeTiers\Form as PrizeTierForm;
+use XtendLunar\Addons\QuizApp\Livewire\PrizeTiers\Table as PrizeTierTable;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
 use XtendLunar\Addons\QuizApp\Policies\QuizPolicy;
@@ -59,6 +62,16 @@ class QuizAppProvider extends XtendAddonProvider
                     ->icon('users');
             });
 
+        Menu::slot('sidebar')
+            ->group('hub.entertainment')
+            ->name('Entertainment')
+            ->addItem(function (MenuLink $item) {
+                return $item->name('Quiz')
+                    ->handle('hub.quiz-app')
+                    ->route('hub.quiz-app.index')
+                    ->icon('users');
+            });
+
         $this->publishes([
            __DIR__.'/../config/quiz-app.php' => config_path('quiz-app.php'),
         ]);
@@ -79,6 +92,8 @@ class QuizAppProvider extends XtendAddonProvider
         Livewire::component('xtend-lunar::quiz-app.quizzes.form', QuizForm::class);
         Livewire::component('xtend-lunar::quiz-app.questions.table', QuestionTable::class);
         Livewire::component('xtend-lunar::quiz-app.questions.form', QuestionForm::class);
+        Livewire::component('xtend-lunar::quiz-app.prize-tiers.table', PrizeTierTable::class);
+        Livewire::component('xtend-lunar::quiz-app.prize-tiers.form', PrizeTierForm::class);
     }
 
     protected function registerPolicies()
