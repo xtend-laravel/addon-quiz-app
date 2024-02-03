@@ -50,7 +50,7 @@ class ValidateUserQuizAction extends Action
         $questionsNb = $this->payload->count();
         $correctAnswersNb = $this->payload->filter(function ($item) {
             $question = QuizQuestion::find($item['question_id']);
-            return $question->checkCorrectAnswer($item['answer_id']);
+            return $question?->checkCorrectAnswer($item['answer_id']);
         })->count();
 
         $this->userResponse->update([
