@@ -29,8 +29,8 @@ class Table extends Component implements HasTable
     {
         return [
             TextColumn::make('name.en')->label('Tier Name'),
-            TextColumn::make('discount')->getStateUsing(fn(QuizPrizeTier $record) => 'DISCOUNT24'),
-            BadgeColumn::make('percentage_off')->getStateUsing(fn(QuizPrizeTier $record) => $value ?? 100 . '%'),
+            TextColumn::make('discount')->getStateUsing(fn(QuizPrizeTier $record) => $record->discount->name ?? 'No Discount Set'),
+            BadgeColumn::make('percentage_off')->getStateUsing(fn(QuizPrizeTier $record) => $record->discount->data['percentage'] ?? '--'),
         ];
     }
 
