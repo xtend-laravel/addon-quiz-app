@@ -5,6 +5,7 @@ use Binaryk\LaravelRestify\Actions\Action;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Lunar\DiscountTypes\AmountOff;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\QuizPrizeTier;
 use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
@@ -12,6 +13,8 @@ use XtendLunar\Addons\QuizApp\Models\QuizUserResponse;
 
 class ValidateUserQuizAction extends Action
 {
+    protected Quiz $quiz;
+
     protected Collection $payload;
 
     protected QuizUserResponse $userResponse;
@@ -20,10 +23,10 @@ class ValidateUserQuizAction extends Action
 
     public function handle(Request $request, Quiz $models): JsonResponse
     {
-        $quiz = $models;
+        $this->quiz = $models;
         $this->payload = collect($request->payload ?? []);
 
-        $this->userResponse = $quiz->responses()->create([
+        $this->userResponse = $this->quiz->responses()->create([
            'user_id' => $request->user()->id,
            'payload' => $this->payload,
         ]);
@@ -68,14 +71,22 @@ class ValidateUserQuizAction extends Action
         }
 
         if ($this->userResponse->total_score >= 70 && $this->userResponse->total_score < 90) {
-            return $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'third_place');
+            $prizeTier = $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'third_place');
+            $this->generateDiscount($prizeTier);
+            return $prizeTier;
         }
 
         if ($this->userResponse->total_score >= 90 && $this->userResponse->total_score < 100) {
-            return $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'second_place');
+            $prizeTier = $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'second_place');
+            $this->generateDiscount($prizeTier);
+            return $prizeTier;
         }
 
-        return $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'grand_prize');
+        $prizeTier = $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'grand_prize');
+
+        $this->generateDiscount($prizeTier);
+
+        return $prizeTier;
     }
 
     protected function takingPartEligibility(): ?QuizPrizeTier
@@ -91,6 +102,44 @@ class ValidateUserQuizAction extends Action
 
         $this->message = 'You are eligible for the lowest prize tier';
 
-        return $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'participation');
+        $prizeTier = $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'participation');
+
+        $this->generateDiscount($prizeTier);
+
+        return $prizeTier;
+    }
+
+    protected function generateDiscount(QuizPrizeTier $prizeTier): void
+    {
+        if (!$prizeTier->percentage_off) {
+            return;
+        }
+
+        /** @var \Lunar\Models\Discount $discount */
+        $discount = $prizeTier->discount()->updateOrCreate([
+            'handle' => $prizeTier->handle.'_discount'.'_'.$this->userResponse->user_id,
+        ], [
+            'name' => $prizeTier->translate('name'). ' Discount',
+            'type' => AmountOff::class,
+            'data' => [
+                'percentage' => (int)$prizeTier->percentage_off,
+                'fixed_value' => false,
+            ],
+            'starts_at' => $this->quiz->starts_at,
+            'expires_at' => $this->quiz->ends_at,
+        ]);
+
+        $discount->users()->syncWithoutDetaching($this->userResponse->user_id);
+
+        $discount->update([
+            'coupon' => $this->generateUserCouponCode(),
+        ]);
+    }
+
+    protected function generateUserCouponCode(): string
+    {
+        $randomId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        $userId = str_pad($this->userResponse->user_id, 4, '0', STR_PAD_LEFT);
+        return "AWR-{$this->quiz->id}-{$randomId}-{$userId}";
     }
 }
