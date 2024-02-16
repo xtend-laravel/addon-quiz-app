@@ -126,7 +126,7 @@ class ValidateUserQuizAction extends Action
                 'fixed_value' => false,
             ],
             'starts_at' => $this->quiz->starts_at,
-            'expires_at' => $this->quiz->ends_at,
+            'ends_at' => $this->quiz->ends_at,
         ]);
 
         $discount->users()->syncWithoutDetaching($this->userResponse->user_id);
