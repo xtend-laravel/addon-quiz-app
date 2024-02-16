@@ -5,13 +5,14 @@ namespace XtendLunar\Addons\QuizApp;
 use Binaryk\LaravelRestify\Traits\InteractsWithRestifyRepositories;
 use CodeLabX\XtendLaravel\Base\XtendAddonProvider;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
 use Lunar\Hub\Facades\Menu;
 use Lunar\Hub\Menu\MenuLink;
 use QuizApp\Database\Seeders\QuizSeeder;
+use XtendLunar\Addons\QuizApp\Commands\CheckDispatchQuizGrandPrize;
 use XtendLunar\Addons\QuizApp\Livewire\Quizzes\Form as QuizForm;
 use XtendLunar\Addons\QuizApp\Livewire\Quizzes\Table as QuizTable;
 use XtendLunar\Addons\QuizApp\Livewire\Questions\Form as QuestionForm;
@@ -53,14 +54,17 @@ class QuizAppProvider extends XtendAddonProvider
         $this->registerPolicies();
         Blade::componentNamespace('XtendLunar\\Addons\\QuizApp\\Components', 'xtend-lunar::quiz-app');
 
-        Menu::slot('sidebar')
-            ->group('hub.configure')
-            ->addItem(function (MenuLink $item) {
-                return $item->name('Quiz App')
-                    ->handle('hub.quiz-app')
-                    ->route('hub.quiz-app.index')
-                    ->icon('users');
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                CheckDispatchQuizGrandPrize::class,
+            ]);
+        }
+
+        if ($this->app->environment(['production', 'staging'])) {
+            $this->app->afterResolving(Schedule::class, function (Schedule $schedule) {
+                $schedule->command(CheckDispatchQuizGrandPrize::class)->dailyAt('00:00');
             });
+        }
 
         Menu::slot('sidebar')
             ->group('hub.entertainment')

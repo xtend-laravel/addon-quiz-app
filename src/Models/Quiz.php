@@ -2,6 +2,7 @@
 
 namespace XtendLunar\Addons\QuizApp\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -51,6 +52,11 @@ class Quiz extends Model
     protected static function newFactory(): QuizFactory
     {
         return QuizFactory::new();
+    }
+
+    public function scopeActive($query): Builder
+    {
+        return $query->where('active', true);
     }
 
     public function quizQuestions(): HasMany

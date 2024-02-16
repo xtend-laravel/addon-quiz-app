@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Lunar\DiscountTypes\AmountOff;
+use Lunar\Models\Discount;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\QuizPrizeTier;
 use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
@@ -34,10 +35,21 @@ class ValidateUserQuizAction extends Action
         $this->calculateElapsedTime();
         $this->calculateScore();
 
+        $priceTier = $this->checkPriceTierEligibility();
+
         return data([
             'message' => $this->message,
             'score' => $this->userResponse->total_score,
-            'price_tier' => $this->checkPriceTierEligibility(),
+            'finalist' => $this->userResponse->total_score === 100,
+            'price_tier' => $priceTier ? [
+                'name' => $priceTier->translate('name'),
+                'percentage' => $priceTier->percentage_off,
+                'discount' => [
+                    'coupon' => $priceTier->discount?->coupon,
+                    'name' => $priceTier->discount?->name,
+                    'ends_at' => $priceTier->discount?->ends_at->format('d M Y'),
+                ]
+            ] : null,
         ]);
     }
 
@@ -76,15 +88,12 @@ class ValidateUserQuizAction extends Action
             return $prizeTier;
         }
 
+        $prizeTier = $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'second_place');
         if ($this->userResponse->total_score >= 90 && $this->userResponse->total_score < 100) {
-            $prizeTier = $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'second_place');
             $this->generateDiscount($prizeTier);
             return $prizeTier;
         }
 
-        $prizeTier = $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'grand_prize');
-
-        $this->generateDiscount($prizeTier);
 
         return $prizeTier;
     }
@@ -102,44 +111,61 @@ class ValidateUserQuizAction extends Action
 
         $this->message = 'You are eligible for the lowest prize tier';
 
+        /** @var QuizPrizeTier $prizeTier */
         $prizeTier = $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'participation');
 
-        $this->generateDiscount($prizeTier);
+        $discount = $this->generateDiscount($prizeTier);
 
-        return $prizeTier;
+        if ($discount) {
+            $prizeTier->discount()->associate($discount);
+            $prizeTier->save();
+        }
+
+        return $prizeTier->fresh();
     }
 
-    protected function generateDiscount(QuizPrizeTier $prizeTier): void
+    protected function generateDiscount(QuizPrizeTier $prizeTier): ?Discount
     {
         if (!$prizeTier->percentage_off) {
-            return;
+            return null;
         }
 
         /** @var \Lunar\Models\Discount $discount */
-        $discount = $prizeTier->discount()->updateOrCreate([
-            'handle' => $prizeTier->handle.'_discount'.'_'.$this->userResponse->user_id,
-        ], [
-            'name' => $prizeTier->translate('name'). ' Discount',
-            'type' => AmountOff::class,
-            'data' => [
-                'percentage' => (int)$prizeTier->percentage_off,
-                'fixed_value' => false,
-            ],
-            'starts_at' => $this->quiz->starts_at,
-            'ends_at' => $this->quiz->ends_at,
-        ]);
+        $discount = Discount::query()->firstWhere('handle', $prizeTier->handle.'_discount'.'_'.$this->userResponse->user_id);
+        if (!$discount) {
+            $discount = $prizeTier->discount()->create([
+                'handle' => $prizeTier->handle.'_discount'.'_'.$this->userResponse->user_id,
+                'name' => $prizeTier->translate('name'). ' Discount',
+                'type' => AmountOff::class,
+                'data' => [
+                    'percentage' => (int)$prizeTier->percentage_off,
+                    'fixed_value' => false,
+                ],
+                'starts_at' => $this->quiz->starts_at,
+                'ends_at' => $this->quiz->ends_at,
+            ]);
+        } else {
+            $discount->update([
+                'data' => [
+                    'percentage' => (int)$prizeTier->percentage_off,
+                    'fixed_value' => false,
+                ],
+            ]);
+        }
 
         $discount->users()->syncWithoutDetaching($this->userResponse->user_id);
 
         $discount->update([
             'coupon' => $this->generateUserCouponCode(),
         ]);
+
+        return $discount;
     }
 
     protected function generateUserCouponCode(): string
     {
         $randomId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
         $userId = str_pad($this->userResponse->user_id, 4, '0', STR_PAD_LEFT);
-        return "AWR-{$this->quiz->id}-{$randomId}-{$userId}";
+        return "AWR-Q{$this->quiz->id}-{$randomId}-{$userId}";
     }
 }

@@ -145,12 +145,12 @@ class Form extends Component implements HasForms
                 ),
             ],
             [
-                'handle' => 'grand_prize',
+                'handle' => 'grand_finalist',
                 'name' => new TranslatedText(
                     collect([
-                        'en' => 'Grand Prize',
-                        'fr' => 'Grand Prix',
-                        'ar' => 'الجائزة الكبرى',
+                        'en' => 'Grand Finalist',
+                        'fr' => 'Grand finaliste',
+                        'ar' => 'النهائي الكبير',
                     ]),
                 ),
             ],
