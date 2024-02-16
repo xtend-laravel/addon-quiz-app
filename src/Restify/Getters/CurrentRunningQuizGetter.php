@@ -6,6 +6,7 @@ use Binaryk\LaravelRestify\Getters\Getter;
 use Binaryk\LaravelRestify\Http\Requests\GetterRequest;
 use Binaryk\LaravelRestify\Http\Requests\RestifyRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 use XtendLunar\Addons\QuizApp\Models\Quiz;
 
 class CurrentRunningQuizGetter extends Getter
@@ -22,8 +23,12 @@ class CurrentRunningQuizGetter extends Getter
             ], 422);
         }
 
+        $hasFeaturedImage = $currentQuiz->featured_image && Storage::disk('do')->exists($currentQuiz->featured_image);
         return response()->json([
-            'quiz' => $currentQuiz,
+            'quiz' => [
+              ...$currentQuiz->toArray(),
+              'featured_image' => $hasFeaturedImage ? Storage::disk('do')->url($currentQuiz->featured_image) : null,
+            ],
             'questionNb' => $currentQuiz->quizQuestions()->count(),
         ]);
     }
