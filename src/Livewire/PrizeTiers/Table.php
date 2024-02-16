@@ -30,7 +30,7 @@ class Table extends Component implements HasTable
         return [
             TextColumn::make('name.en')->label('Tier Name'),
             TextColumn::make('discount')->getStateUsing(fn(QuizPrizeTier $record) => $record->discount->name ?? 'No Discount Set'),
-            BadgeColumn::make('percentage_off')->getStateUsing(fn(QuizPrizeTier $record) => $record->discount->data['percentage'] ?? '--'),
+            BadgeColumn::make('percentage_off')->getStateUsing(fn(QuizPrizeTier $record) => $record->percentage_off ?? $record->discount->data['percentage'] ?? '--'),
         ];
     }
 

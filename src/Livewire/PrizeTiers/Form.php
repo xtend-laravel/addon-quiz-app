@@ -38,13 +38,17 @@ class Form extends Component implements HasForms
     public function getFormSchema(): array
     {
         return [
-            Card::make()->columns()->schema([
+            Card::make()->columns(3)->schema([
                 TextInput::make('name')
                     ->required()
                     ->translatable(),
+                TextInput::make('percentage_off')
+                    ->required()
+                    ->numeric()
+                    ->minValue(1)
+                    ->maxValue(100),
                 Select::make('discount')
-                    ->relationship('discount', 'name')
-                    ->required(),
+                    ->relationship('discount', 'name'),
             ]),
         ];
     }
