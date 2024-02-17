@@ -1,6 +1,7 @@
 <?php
 namespace XtendLunar\Addons\QuizApp\Restify\Actions;
 
+use App\Models\User;
 use Binaryk\LaravelRestify\Actions\Action;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use XtendLunar\Addons\QuizApp\Models\Quiz;
 use XtendLunar\Addons\QuizApp\Models\QuizPrizeTier;
 use XtendLunar\Addons\QuizApp\Models\QuizQuestion;
 use XtendLunar\Addons\QuizApp\Models\QuizUserResponse;
+use XtendLunar\Addons\QuizApp\Notifications\QuizPrizeTierNotification;
 
 class ValidateUserQuizAction extends Action
 {
@@ -153,7 +155,10 @@ class ValidateUserQuizAction extends Action
             ]);
         }
 
-        $discount->users()->syncWithoutDetaching($this->userResponse->user_id);
+        $user = User::find($this->userResponse->user_id);
+        $discount->users()->syncWithoutDetaching($user->id);
+
+        $user->notify(new QuizPrizeTierNotification($user, $prizeTier));
 
         $discount->update([
             'coupon' => $this->generateUserCouponCode(),
