@@ -97,6 +97,8 @@ class CheckDispatchQuizGrandPrize extends Command
                 ],
                 'starts_at' => $this->quiz->starts_at,
                 'ends_at' => $this->quiz->ends_at,
+                'priority' => 10,
+                'stop' => true,
             ]);
         } else {
             $discount->update([
@@ -109,6 +111,7 @@ class CheckDispatchQuizGrandPrize extends Command
 
         $discount->users()->detach();
         $discount->users()->attach($this->user->id);
+        $discount->channels()->sync([1]);
 
         $discount->update([
             'coupon' => $this->generateUserCouponCode(),
