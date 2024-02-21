@@ -80,6 +80,8 @@ class CheckDispatchQuizGrandPrize extends Command
         $discount = $this->generateDiscount($prizeTier);
 
         $this->user->notify(new QuizWinnerNotification($this->user, $discount));
+
+        $this->quiz->winner()->associate($this->user);
     }
 
     protected function generateDiscount(QuizPrizeTier $prizeTier): ?Discount
