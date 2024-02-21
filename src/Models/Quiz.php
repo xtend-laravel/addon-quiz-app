@@ -2,6 +2,7 @@
 
 namespace XtendLunar\Addons\QuizApp\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -72,5 +73,10 @@ class Quiz extends Model
     public function prizeTiers(): HasMany
     {
         return $this->hasMany(QuizPrizeTier::class);
+    }
+
+    public function winner()
+    {
+        return $this->hasOne(User::class, 'id', 'winner_user_id');
     }
 }
