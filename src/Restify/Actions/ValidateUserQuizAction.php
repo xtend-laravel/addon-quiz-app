@@ -87,17 +87,16 @@ class ValidateUserQuizAction extends Action
         if ($this->userResponse->total_score >= 70 && $this->userResponse->total_score < 90) {
             $prizeTier = $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'third_place');
             $this->generateDiscount($prizeTier);
-            return $prizeTier;
+            return $prizeTier->fresh();
         }
 
         $prizeTier = $this->userResponse->quiz->prizeTiers()->firstWhere('handle', 'second_place');
         if ($this->userResponse->total_score >= 90 && $this->userResponse->total_score < 100) {
             $this->generateDiscount($prizeTier);
-            return $prizeTier;
+            return $prizeTier->fresh();
         }
 
-
-        return $prizeTier;
+        return $prizeTier->fresh();
     }
 
     protected function takingPartEligibility(): ?QuizPrizeTier
