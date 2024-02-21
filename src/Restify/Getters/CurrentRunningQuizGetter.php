@@ -15,12 +15,16 @@ class CurrentRunningQuizGetter extends Getter
 
     public function handle(GetterRequest|RestifyRequest $request): JsonResponse
     {
-        try {
-            $currentQuiz = Quiz::query()->where('active', true)->firstOrFail();
-        } catch (\Exception $e) {
+        $currentQuiz = Quiz::query()
+            ->where('active', true)
+            ->where('ends_at', '>', now())
+            ->first();
+
+        if (!$currentQuiz) {
             return response()->json([
-                'message' => $e->getMessage(),
-            ], 422);
+                'quiz' => null,
+                'questionNb' => 0,
+            ]);
         }
 
         $hasFeaturedImage = $currentQuiz->featured_image && Storage::disk('do')->exists($currentQuiz->featured_image);
