@@ -26,7 +26,7 @@ class CheckDispatchQuizGrandPrize extends Command
      */
     protected $description = 'This command will check and dispatch the grand prize to the winner of the quiz.';
 
-    protected Quiz $quiz;
+    protected ?Quiz $quiz;
 
     protected User $user;
 
@@ -38,7 +38,7 @@ class CheckDispatchQuizGrandPrize extends Command
     public function handle()
     {
         // Do we have a quiz that is active and ended in the last 10 minutes?
-        $this->quiz = Quiz::active()->whereDate('ends_at', now()->toDateString())->first();
+        $this->quiz = Quiz::active()->whereDate('ends_at', now())->first();
         if (!$this->quiz) {
             $this->components->warn('No active quiz found which ended today.');
             return self::SUCCESS;
