@@ -27,6 +27,15 @@ class QuizQuestion extends Model
         'name' => AsCollection::class,
     ];
 
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::deleting(function (QuizQuestion $question) {
+            $question->answers()->delete();
+        });
+    }
+
     protected static function newFactory(): QuizQuestionFactory
     {
         return QuizQuestionFactory::new();
