@@ -15,6 +15,7 @@ class CurrentRunningQuizGetter extends Getter
 
     public function handle(GetterRequest|RestifyRequest $request): JsonResponse
     {
+        /** @var Quiz $currentQuiz */
         $currentQuiz = Quiz::query()
             ->where('active', true)
             ->where('ends_at', '>', now())
@@ -27,6 +28,14 @@ class CurrentRunningQuizGetter extends Getter
             ]);
         }
 
+        if ($this->userAlreadyTakenQuiz($currentQuiz)) {
+            return response()->json([
+                'quiz' => null,
+                'questionNb' => 0,
+                'message' => 'You have already taken this quiz.',
+            ]);
+        }
+
         $hasFeaturedImage = $currentQuiz->featured_image && Storage::disk('do')->exists($currentQuiz->featured_image);
         return response()->json([
             'quiz' => [
@@ -35,5 +44,10 @@ class CurrentRunningQuizGetter extends Getter
             ],
             'questionNb' => $currentQuiz->quizQuestions()->count(),
         ]);
+    }
+
+    protected function userAlreadyTakenQuiz(Quiz $quiz)
+    {
+        return $quiz->responses()->where('user_id', auth()->id())->exists();
     }
 }
