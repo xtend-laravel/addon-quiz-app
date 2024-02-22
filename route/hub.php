@@ -11,7 +11,7 @@ use XtendLunar\Addons\QuizApp\Livewire\Pages\QuizAppEditQuestion;
 use XtendLunar\Addons\QuizApp\Livewire\Pages\QuizAppIndex;
 
 Route::prefix(config('lunar-hub.system.path'))
-    ->middleware(['web', Authenticate::class, 'can:settings:core'])
+    ->middleware(['web', Authenticate::class, 'can:hub.quiz-app:manage-quizzes'])
     ->group(function () {
         // @todo Create QuizAppEdit and QuizAppShow page components
         Route::get('/quiz-app', QuizAppIndex::class)->name('hub.quiz-app.index');
