@@ -9,6 +9,8 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Livewire;
+use Lunar\Hub\Auth\Manifest;
+use Lunar\Hub\Auth\Permission;
 use Lunar\Hub\Facades\Menu;
 use Lunar\Hub\Menu\MenuLink;
 use QuizApp\Database\Seeders\QuizSeeder;
@@ -79,6 +81,14 @@ class QuizAppProvider extends XtendAddonProvider
         $this->publishes([
            __DIR__.'/../config/quiz-app.php' => config_path('quiz-app.php'),
         ]);
+
+        $manifest = $this->app->get(Manifest::class);
+
+        $manifest->addPermission(function (Permission $permission) {
+            $permission->name = 'Manage Quizzes';
+            $permission->handle = 'hub.quiz-app:manage-quizzes';
+            $permission->description = 'Allow the staff member to manage quizzes';
+        });
     }
 
     protected function registerSeeders(array $seeders = []): void
